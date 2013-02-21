@@ -115,13 +115,27 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Arrow.cs" />
+    <Compile Include="DataRequests.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DPS\DamageSource.cs" />
     <Compile Include="EXTHelper.cs" />
     <Compile Include="ItemAttributes.cs" />
+    <Compile Include="Parser\ItemDataParser.cs" />
+    <Compile Include="Parser\ParserBase.cs" />
+    <Compile Include="Parser\SkillNodeParser.cs" />
     <Compile Include="Point2D.cs" />
     <Compile Include="Rect2D.cs" />
     <Compile Include="SkillTree-Drawing.cs" />
     <Compile Include="SkillTree.cs" />
     <Compile Include="SkillTreeImporter.cs" />
+    <Compile Include="Stats\Attribute.cs" />
+    <Compile Include="Stats\Character.cs" />
+    <Compile Include="Stats\CharacterBaseConfig.cs" />
+    <Compile Include="Stats\DamageType.cs" />
+    <Compile Include="Stats\Item.cs" />
+    <Compile Include="Stats\Modifier.cs" />
+    <Compile Include="Stats\StatType.cs" />
     <Compile Include="Vector2D.cs" />
     <Compile Include="ZoomBorder.cs" />
     <Page Include="MainWindow.xaml">

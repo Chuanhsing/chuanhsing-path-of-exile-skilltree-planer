@@ -15,6 +15,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using POESKillTree;
+using POESKillTree.Parser;
+using POESKillTree.Stats;
 using WPFSKillTree;
 
 namespace POESKillTree
@@ -122,11 +124,7 @@ namespace POESKillTree
             }
 
             if ( Tree == null ) return;
-            SkillTree.SkillNode startnode = Tree.Skillnodes.First( nd => nd.Value.name == ( ( ( string )( ( ComboBoxItem )cbCharType.SelectedItem ).Content ) ).ToUpper( ) ).Value;
-            Tree.SkilledNodes.Clear( );
-            Tree.SkilledNodes.Add( startnode.id );
-            Tree.Chartype = Tree.CharName.IndexOf( ( ( string )( ( ComboBoxItem )cbCharType.SelectedItem ).Content ).ToUpper( ) );
-            Tree.UpdateAvailNodes( );
+            Tree.Chartype = cbCharType.SelectedIndex;
             UpdateAllAttributeList( );
         }
         private void Window_SizeChanged( object sender, SizeChangedEventArgs e )
@@ -137,6 +135,7 @@ namespace POESKillTree
                 addtransform = Tree.TRect.TopLeft;
             }
         }
+
         private void border1_Click( object sender, RoutedEventArgs e )
         {
 
@@ -145,7 +144,8 @@ namespace POESKillTree
             v = v * multransform + addtransform;
             SkillTree.SkillNode node = null;
 
-            var nodes = Tree.SkilledNodes.Where( n => ( ( Tree.Skillnodes[ n ].Position - v ).Length < 50 ) );
+            // ak: This should really be inside a controller class!
+            var nodes = Tree.SkilledNodes.Where(n => ((Tree.Skillnodes[n].Position - v).Length < 50));
             if ( nodes != null && nodes.Count( ) != 0 )
                 node = Tree.Skillnodes[ nodes.First( ) ];
 
@@ -160,6 +160,7 @@ namespace POESKillTree
             {
                 foreach (ushort i in prePath)
                 {
+                    Tree.buyNode( i );
                     Tree.SkilledNodes.Add( i );
                 }
                 UpdateAllAttributeList( );
@@ -354,9 +355,13 @@ namespace POESKillTree
                 return;
             }
 
-           // try
+            // ak: This should really be inside a controller class!
+            // try
            // {
-                ItemAttributes = new ItemAttributes( "Data\\get-items" );
+                ItemDataParser parser = new ItemDataParser();
+                Tree.setCharacterItems( parser.parseItems( File.ReadAllText( "Data\\get-items" ) ) );
+            
+                ItemAttributes = new ItemAttributes("Data\\get-items");
                 lbItemAttr.ItemsSource = ItemAttributes.Attributes;
                 UpdateAllAttributeList( );
             //}
@@ -374,19 +379,51 @@ namespace POESKillTree
         {
             popup1.IsOpen = false;
         }
+
+        private void btnDownloadItemDataWithCredentials_Click(object sender, RoutedEventArgs e)
+        {
+            popup1.IsOpen = false;
+            string email = tbEmail.Text.Length == 0 ? null : tbEmail.Text;
+            string password = tbPassword.Password.Length == 0 ? null : tbPassword.Password;
+
+            // ak: This should really be inside a controller class!
+            byte[] itemData = DataRequests.requestItemData(tbCharName.Text, email, password);
+            if (itemData != null)
+            {
+                File.WriteAllBytes("Data\\get-items", itemData);
+
+                ItemDataParser parser = new ItemDataParser();
+                Tree.setCharacterItems( parser.parseItems( File.ReadAllText( "Data\\get-items" ) ) );
+
+                ItemAttributes = new ItemAttributes("Data\\get-items");
+                lbItemAttr.ItemsSource = ItemAttributes.Attributes;
+                UpdateAllAttributeList();
+            }
+            else
+            {
+                MessageBox.Show("Item data download failed. You probably entered wrong credentials or character name");
+            }
+        }
+
         private void btnDownloadItemData_Click( object sender, RoutedEventArgs e )
         {
             popup1.IsOpen = false;
-            System.Diagnostics.Process.Start( "http://www.pathofexile.com/character-window/get-items?character=" + tbCharName.Text );
+            System.Diagnostics.Process.Start("http://www.pathofexile.com/character-window/get-items?character=" + tbCharName.Text);
         }
+
         private void tbCharName_TextChanged( object sender, TextChangedEventArgs e )
         {
-            tbCharLink.Text = "http://www.pathofexile.com/character-window/get-items?character=" + tbCharName.Text;
+            if (tbCharLink != null)
+            {
+                tbCharLink.Text = "http://www.pathofexile.com/character-window/get-items?character=" + tbCharName.Text;
+            }
         }
+
         private void tbSearch_TextChanged( object sender, TextChangedEventArgs e )
         {
             Tree.HighlightNodes( tbSearch.Text, checkBox1.IsChecked.Value );
         }
+
         private void textBox3_TextChanged( object sender, TextChangedEventArgs e )
         {
             int lvl = 0;
@@ -396,11 +433,13 @@ namespace POESKillTree
                 UpdateAllAttributeList( );
             }
         }
+
         private void button3_Click( object sender, RoutedEventArgs e )
         {
             Tree.SkillAllHighligtedNodes( );
             UpdateAllAttributeList( );
         }
+
         private void button4_Click( object sender, RoutedEventArgs e )
         {
             if ( Tree == null ) return;
@@ -408,7 +447,9 @@ namespace POESKillTree
 
             UpdateAllAttributeList( );
         }
+
         private RenderTargetBitmap ClipboardBmp;
+
         private void btnScreenShot_Click( object sender, RoutedEventArgs e )
         {
             int maxsize = 3000;

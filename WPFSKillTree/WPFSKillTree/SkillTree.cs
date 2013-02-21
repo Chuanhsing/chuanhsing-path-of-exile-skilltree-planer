@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using POESKillTree.Parser;
+using POESKillTree.Stats;
 using Raven.Json.Linq;
 using System.Diagnostics;
 
@@ -15,6 +17,7 @@ namespace POESKillTree
 {
     public partial class SkillTree
     {
+        public Stats.Character character;
         string TreeAddress = "http://www.pathofexile.com/passive-skill-tree/";
         public List<NodeGroup> NodeGroups = new List<NodeGroup>();
         public Dictionary<UInt16, SkillNode> Skillnodes = new Dictionary<UInt16, SkillNode>();
@@ -61,6 +64,7 @@ namespace POESKillTree
         public HashSet<int[]> Links = new HashSet<int[]>();
         public void Reset()
         {
+            character = new Character( new CharacterBaseConfig( (CharacterType)chartype ) );
             SkilledNodes.Clear();
             var node = Skillnodes.First(nd => nd.Value.name == CharName[chartype]);
             SkilledNodes.Add(node.Value.id);
@@ -171,6 +175,9 @@ namespace POESKillTree
                 var co = ((RavenJObject)((RavenJObject)jObject["characterData"])[s]);
                 CharBaseAttributes[int.Parse(s) - 1] = new Dictionary<string, float>() { { "+# to Strength", co["base_str"].Value<int>() }, { "+# to Dexterity", co["base_dex"].Value<int>() }, { "+# to Intelligence", co["base_int"].Value<int>() } };
             }
+
+            Parser.SkillNodeParser nodeParser = new SkillNodeParser();
+
             foreach (RavenJObject token in jObject["nodes"].Values())
             {
                 Skillnodes.Add(token["id"].Value<ushort>(), new SkillTree.SkillNode()
@@ -190,6 +197,7 @@ namespace POESKillTree
                     not = token["not"].Value<bool>(),
                     sa = token["sa"].Value<int>(),
                     Mastery = token["m"].Value<bool>(),
+                    statModifiers = nodeParser.parseNode( token["dn"].Value<string>(), token["sd"].Values<string>().ToArray() )
                 });
             }
             List<ushort[]> links = new List<ushort[]>();
@@ -311,12 +319,8 @@ namespace POESKillTree
             get { return chartype; }
             set
             {
-
                 chartype = value;
-                SkilledNodes.Clear();
-                var node = Skillnodes.First(nd => nd.Value.name == CharName[chartype]);
-                SkilledNodes.Add(node.Value.id);
-                UpdateAvailNodes();
+                Reset();
                 DrawFaces();
             }
         }
@@ -416,11 +420,16 @@ namespace POESKillTree
 
             //SkilledNodes.Remove(nodeId);
 
+            character.resetStatModifiers();
+
             HashSet<ushort> front = new HashSet<ushort>();
             front.Add(SkilledNodes.First());
             foreach (var i in Skillnodes[SkilledNodes.First()].Neighbor)
                 if (SkilledNodes.Contains(i.id))
-                    front.Add(i.id);
+                {
+                    front.Add( i.id );
+                    buyNode( i.id );
+                }
             HashSet<ushort> skilled_reachable = new HashSet<ushort>(front);
             while (front.Count > 0)
             {
@@ -431,6 +440,7 @@ namespace POESKillTree
                         {
                             newFront.Add(j);
                             skilled_reachable.Add(j);
+                            buyNode( j );
                         }
 
                 front = newFront;
@@ -462,6 +472,7 @@ namespace POESKillTree
             foreach (ushort node in nodes)
             {
                 SkilledNodes.Add(node);
+                buyNode( node );
             }
             UpdateAvailNodes();
         }
@@ -655,6 +666,7 @@ namespace POESKillTree
             public int ia;//"ia": 0,
             public List<int> linkID = new List<int>();// "out": []
             public bool Mastery;
+            public List<StatModifier> statModifiers;
 
             public List<SkillNode> Neighbor = new List<SkillNode>();
             public NodeGroup NodeGroup;
@@ -755,6 +767,25 @@ namespace POESKillTree
             return hs.Count == 0 ? hs : SkillStep(hs);
         }
 
+        public void buyNode( ushort id )
+        {
+            SkillNode node = Skillnodes[ id ];
+            if (node != null)
+            {
+                foreach (StatModifier modifier in node.statModifiers)
+                {
+                    character.addStatModifier( modifier );
+                }
+            }
+        }
+
+        public void setCharacterItems( List<Item> items )
+        {
+            foreach (Item item in items)
+            {
+                character.addItem( item );
+            }
+        }
     }
 
 

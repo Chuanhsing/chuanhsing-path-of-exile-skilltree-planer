@@ -135,6 +135,7 @@ namespace POESKillTree
             tree.SkilledNodes.Clear( );
             SkillTree.SkillNode startnode = tree.Skillnodes.First( nd => nd.Value.name == tree.CharName[ tree.Chartype ].ToUpper( ) ).Value;
             tree.SkilledNodes.Add( startnode.id );
+            tree.buyNode( startnode.id );
 
             for ( int i = 1 ; i < buildResp.Length ; ++i )
             {
@@ -155,6 +156,7 @@ namespace POESKillTree
                 }
 
                 tree.SkilledNodes.Add( minNode.Key );
+                tree.buyNode( minNode.Key );
             }
             tree.UpdateAvailNodes( );
 

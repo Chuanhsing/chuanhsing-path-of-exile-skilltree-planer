@@ -20,20 +20,28 @@
         <Popup Name="popup1" Height="Auto" Placement="Center" PlacementTarget="{Binding ElementName=txtSynToListBox}" Margin="279,150,324,150">
             <Border >
                 <StackPanel Background="Beige">
-                    <TextBlock Text="No Item Data Found" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Please enter Your Character Name Below and click on Download. " HorizontalAlignment="Center"/>
-                    <TextBlock Text="This Will open your default Web-browser and download the Item data.  " HorizontalAlignment="Center"/>
-                    <TextBlock Text="Save it to the data folder beside this executable  " HorizontalAlignment="Center"/>
-                    <TextBlock Text="it's name should be 'get-items' " HorizontalAlignment="Center"/>
-                    <TextBlock Text="click on the Load Items Button Again to Load the items after the download' " HorizontalAlignment="Center"/>
+                    <TextBlock Text="Please enter your character name below. " HorizontalAlignment="Center"/>
+                    <TextBox Text="YourCharacterName" Name="tbCharName" TextChanged="tbCharName_TextChanged"  HorizontalAlignment="Center"/>
+                    
+                    <TextBlock Text="You can choose to let this tool download your character data automatically." HorizontalAlignment="Center"/>
+                    <TextBlock Text="This requires your email and password since that data is only available to logged in users." HorizontalAlignment="Center"/>
+                    <TextBlock Text="Your credentials won't be stored. They are only used to download the data and then thrown away." HorizontalAlignment="Center"/>
+                    <TextBox Text="Email" Name="tbEmail" HorizontalAlignment="Center"/>
+                    <PasswordBox Name="tbPassword"  HorizontalAlignment="Center"/>
+                    <Button Content="Yes, download automatically for me" x:Name="btnDownloadItemDataWithCredentials" Width="auto" Height="auto" Click="btnDownloadItemDataWithCredentials_Click"></Button>
+                    <TextBlock Text=""/>
+                    <TextBlock Text="If you aren't comfortable to enter your data into this tool, you can also download the data yourself." HorizontalAlignment="Center"/>
+                    <TextBlock Text="Click on the button below. This will open your default Web-browser and download the item data.  " HorizontalAlignment="Center"/>
+                    <TextBlock Text="Save it to the data folder beside this executable.  " HorizontalAlignment="Center"/>
+                    <TextBlock Text="Its name should be 'get-items'. " HorizontalAlignment="Center"/>
+                    <TextBlock Text="Click on the Load Items Button Again to Load the items after the download' " HorizontalAlignment="Center"/>
                     <TextBlock Text="" HorizontalAlignment="Center"/>
-                    <TextBlock Text="if you don't like the button or the tool just crashes the next time you click on Load Items " HorizontalAlignment="Center"/>
+                    <TextBlock Text="If you don't like the button or the tool just crashes the next time you click on Load Items, " HorizontalAlignment="Center"/>
                     <TextBlock Text="copy this link to your browser after typing your name " HorizontalAlignment="Center"/>
                     <TextBox Name="tbCharLink" />
-                    <TextBox Text="YourCharacterName" Name="tbCharName" TextChanged="tbCharName_TextChanged"  HorizontalAlignment="Center"/>
                     <TextBlock Text=""/>
-                    <Button Content="Download" x:Name="btnDownloadItemData" Width="auto" Height="auto" Click="btnDownloadItemData_Click"></Button>
-                    <Button Content="Ok" x:Name="btnPopup" Click="btnPopup_OnClick" Width="auto" Height="auto" />
+                    <Button Content="No thanks, I'll download myself" x:Name="btnDownloadItemData" Width="auto" Height="auto" Click="btnDownloadItemData_Click"></Button>
+                    <Button Content="Cancel" x:Name="btnPopup" Click="btnPopup_OnClick" Width="auto" Height="auto" />
 
                 </StackPanel>
             </Border>
@@ -102,7 +110,7 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="367,20,0,0" Name="tbLevel" VerticalAlignment="Top" Width="41" TextChanged="textBox3_TextChanged" />
         <Button Content="SkillAll" Height="23" HorizontalAlignment="Left" Margin="333,0,0,29" Name="button3" VerticalAlignment="Bottom" Width="75" Click="button3_Click" />
         <CheckBox Content="RegEx" Height="16" HorizontalAlignment="Left" Margin="225,0,0,58" Name="checkBox1" VerticalAlignment="Bottom" />
-        <Button Content="Reset" Height="23" HorizontalAlignment="Left" Margin="203,18,0,0" Name="button4" VerticalAlignment="Top" Width="40" Click="button4_Click" />
+        <Button Content="Reset" Height="23" HorizontalAlignment="Right" Margin="0,18,963,0" Name="button4" VerticalAlignment="Top" Width="40" Click="button4_Click" />
         <Button Content="Screenshot" Height="23" HorizontalAlignment="Left" Margin="0,0,0,55" Name="btnScreenShot" VerticalAlignment="Bottom" Width="75" Click="btnScreenShot_Click" />
     </Grid>
 </Window>

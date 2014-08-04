@@ -36,17 +36,17 @@ namespace POESKillTree
         public Dictionary<string, float>[] CharBaseAttributes = new Dictionary<string, float>[7];
         public Dictionary<string, float> BaseAttributes = new Dictionary<string, float>()
                                                               {
-                                                                  {"+# to maximum Mana",36},
-                                                                  {"+# to maximum Life",44},
-                                                                  {"Evasion Rating: #",50},
-                                                                  {"+# Maximum Endurance Charge",3},
-                                                                  {"+# Maximum Frenzy Charge",3},
-                                                                  {"+# Maximum Power Charge",3},
-                                                                  {"#% Additional Elemental Resistance per Endurance Charge",4},
-                                                                  {"#% Physical Damage Reduction per Endurance Charge",4},
-                                                                  {"#% Attack Speed Increase per Frenzy Charge",5},
-                                                                  {"#% Cast Speed Increase per Frenzy Charge",5},
-                                                                  {"#% Critical Strike Chance Increase per Power Charge",50},
+                                                                  {"+# 最大魔力",36}, // to maximum Mana
+                                                                  {"+# 最大生命",44}, // to maximum Life
+                                                                  {"閃避值: #",50}, // Evasion Rating
+                                                                  {"+# 最大耐力球",3}, // Maximum Endurance Charge
+                                                                  {"+# 最大狂怒球",3}, // Maximum Frenzy Charge
+                                                                  {"+# 最大暴擊球",3}, // Maximum Power Charge
+                                                                  {"#% 每個耐力球所提供的元素抗性",4}, // Additional Elemental Resistance per Endurance Charge
+                                                                  {"#% 每個耐力球增加物理傷害減免",4}, // Physical Damage Reduction per Endurance Charge
+                                                                  {"#% 每個狂怒球增加攻擊速度",5}, // Attack Speed Increase per Frenzy Charge
+                                                                  {"#% 每個狂怒球增加施放速度",5}, // Cast Speed Increase per Frenzy Charge
+                                                                  {"#% 每個暴擊球增加暴擊機率",50}, //Critical Strike Chance Increase per Power Charge
                                                               };
         public static float LifePerLevel = 8;
         public static float EvasPerLevel = 3;
@@ -169,7 +169,9 @@ namespace POESKillTree
                 finish( );
             foreach( var c in inTree.characterData)
             {
-                CharBaseAttributes[c.Key] = new Dictionary<string, float>() { { "+# to Strength", c.Value.base_str }, { "+# to Dexterity", c.Value.base_dex }, { "+# to Intelligence", c.Value.base_int } };
+                //CharBaseAttributes[c.Key] = new Dictionary<string, float>() { { "+# to Strength", c.Value.base_str }, { "+# to Dexterity", c.Value.base_dex }, { "+# to Intelligence", c.Value.base_int } };
+                CharBaseAttributes[c.Key] = new Dictionary<string, float>() { { "+# 力量", c.Value.base_str }, { "+# 敏捷", c.Value.base_dex }, { "+# 智慧", c.Value.base_int } };
+
             }
            foreach (var nd in inTree.nodes)
            {
@@ -285,6 +287,7 @@ namespace POESKillTree
         {
             Dictionary<string, List<float>> retval = new Dictionary<string, List<float>>();
             // +# to Strength", co["base_str"].Value<int>() }, { "+# to Dexterity", co["base_dex"].Value<int>() }, { "+# to Intelligence", co["base_int"].Value<int>() } };
+            /*
             retval["+# to maximum Mana"] = new List<float>() { attribs["+# to Intelligence"][0] / IntPerMana + level * ManaPerLevel };
             retval["+#% Energy Shield"] = new List<float>() { attribs["+# to Intelligence"][0] / IntPerES };
 
@@ -294,6 +297,16 @@ namespace POESKillTree
             retval["+# Accuracy Rating"] = new List<float>() { attribs["+# to Dexterity"][0] / DexPerAcc };
             retval["Evasion Rating: #"] = new List<float>() { level * EvasPerLevel };
             retval["#% increased Evasion Rating"] = new List<float>() { attribs["+# to Dexterity"][0] / DexPerEvas };
+             */
+            retval["+# 最大魔力"] = new List<float>() { attribs["+# 智慧"][0] / IntPerMana + level * ManaPerLevel };
+            retval["+#% 能量護盾"] = new List<float>() { attribs["+# 智慧"][0] / IntPerES };
+
+            retval["+# 最大生命"] = new List<float>() { attribs["+# 力量"][0] / IntPerMana + level * LifePerLevel };
+            retval["增加 +#% 近戰物理傷害"] = new List<float>() { attribs["+# 力量"][0] / StrPerED };
+
+            retval["+# 命中值"] = new List<float>() { attribs["+# 敏捷"][0] / DexPerAcc };
+            retval["閃避值: #"] = new List<float>() { level * EvasPerLevel };
+            retval["增加 #% 閃避值"] = new List<float>() { attribs["+# 敏捷"][0] / DexPerEvas };
             return retval;
         }
         public int Level

@@ -45,7 +45,7 @@
         </POESKillTree:ZoomBorder>
         <Label x:Name="lblSkillURL" Content="建構連結:" HorizontalAlignment="Left" Margin="419,0,0,1" VerticalAlignment="Bottom"/>
 
-        <TextBox Height="23" Margin="480,0,84,2" x:Name="tbSkillURL" VerticalAlignment="Bottom" Text="http://www.pathofexile.com/passive-skill-tree/AAAAAgMA"  VerticalContentAlignment="Center" MouseDoubleClick="tbSkillURL_MouseDoubleClick" />
+        <TextBox Height="23" Margin="480,0,84,2" x:Name="tbSkillURL" VerticalAlignment="Bottom" Text="http://accorddb.no-ip.org/passive-skill-tree/AAAAAgMA"  VerticalContentAlignment="Center" MouseDoubleClick="tbSkillURL_MouseDoubleClick" />
         <Expander Header="建構" HorizontalAlignment="Left" Margin="385,10,0,6" ExpandDirection="Right" IsHitTestVisible="True">
             <Grid x:Name="gridBuildManager" Background="#FFE5E5E5" HorizontalAlignment="Left">
                 <ListView x:Name="lvSavedBuilds" Margin="4,26,4,29" HorizontalAlignment="Left" Width="232" ForceCursor="True">

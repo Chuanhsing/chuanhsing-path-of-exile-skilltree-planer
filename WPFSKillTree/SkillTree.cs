@@ -22,7 +22,8 @@ namespace POESKillTree
         public delegate void UpdateLoadingWindow(double current, double max);
 
 
-        string TreeAddress = "http://www.pathofexile.com/passive-skill-tree/";
+        string TreeAddress = "http://web.poe.garena.tw/passive-skill-tree/";
+        //string TreeAddress = "http://www.pathofexile.com/passive-skill-tree/";
         public List<NodeGroup> NodeGroups = new List<NodeGroup>();
         public Dictionary<UInt16, SkillNode> Skillnodes = new Dictionary<UInt16, SkillNode>();
         public List<string> AttributeTypes = new List<string>();
@@ -101,7 +102,8 @@ namespace POESKillTree
                 //loadingWindow.Dispatcher.Invoke(DispatcherPriority.Background,new Action(delegate { }));
 
 
-                string uriString = "http://www.pathofexile.com/passive-skill-tree/";
+                string uriString = "http://web.poe.garena.tw/passive-skill-tree/";
+                //string uriString = "http://www.pathofexile.com/passive-skill-tree/";
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uriString);
                 HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
                 string code = new StreamReader(resp.GetResponseStream()).ReadToEnd();
@@ -330,6 +332,8 @@ namespace POESKillTree
             {
 
                 chartype = value;
+                if (value < 0)
+                    return;
                 SkilledNodes.Clear();
                 var node = Skillnodes.First(nd => nd.Value.name.ToUpper() == CharName[chartype]);
                 SkilledNodes.Add(node.Value.id);
@@ -639,7 +643,8 @@ namespace POESKillTree
 
             public Dictionary<string, KeyValuePair<Rect, string>> SkillPositions = new Dictionary<string, KeyValuePair<Rect, string>>();
             public Dictionary<String, BitmapImage> Images = new Dictionary<string, BitmapImage>();
-            public static string urlpath = "http://www.pathofexile.com/image/build-gen/passive-skill-sprite/";
+            public static string urlpath = "http://web.poe.garena.tw/image/build-gen/passive-skill-sprite/";
+            //public static string urlpath = "http://www.pathofexile.com/image/build-gen/passive-skill-sprite/";
             public void OpenOrDownloadImages(UpdateLoadingWindow update = null)
             {
                 //Application

@@ -275,7 +275,8 @@ namespace POESKillTree
 
             UpdateAttributeList();
         }
-        string TreeAddress = "http://www.pathofexile.com/passive-skill-tree/";
+        //string TreeAddress = "http://www.pathofexile.com/passive-skill-tree/";
+        string TreeAddress = "http://web.poe.garena.tw/passive-skill-tree/";
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             try

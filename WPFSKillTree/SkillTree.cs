@@ -473,13 +473,14 @@ namespace POESKillTree
         }
         public void LoadFromURL(string url)
         {
-            string s = url.Substring(TreeAddress.Length + (url.StartsWith("https") ? 1 : 0)).Replace("-", "+").Replace("_", "/");
+            //string s = url.Substring(TreeAddress.Length + (url.StartsWith("https") ? 1 : 0)).Replace("-", "+").Replace("_", "/");
+            string s = url.Substring(url.LastIndexOf("/")+1).Replace("-", "+").Replace("_", "/");
             byte[] decbuff = Convert.FromBase64String(s);
             var i = BitConverter.ToInt32(new byte[] { decbuff[3], decbuff[2], decbuff[1], decbuff[1] }, 0);
             var b = decbuff[4];
-            var j = 0L;
-            if (i > 0)
-                j = decbuff[5];
+            //var j = 0L;
+            //if (i > 0)
+            //    j = decbuff[5];
             List<UInt16> nodes = new List<UInt16>();
             for (int k = 6; k < decbuff.Length; k += 2)
             {

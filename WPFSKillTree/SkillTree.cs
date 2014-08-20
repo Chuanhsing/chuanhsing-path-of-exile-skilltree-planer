@@ -49,7 +49,7 @@ namespace POESKillTree
                                                                   {"#% 每個狂怒球增加施放速度",5}, // Cast Speed Increase per Frenzy Charge
                                                                   {"#% 每個暴擊球增加暴擊機率",50}, //Critical Strike Chance Increase per Power Charge
                                                               };
-        public static float LifePerLevel = 8;
+        public static float LifePerLevel = 12;
         public static float EvasPerLevel = 3;
         public static float ManaPerLevel = 4;
         public static float IntPerMana = 2;
